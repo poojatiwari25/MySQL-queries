@@ -1,0 +1,649 @@
+CREATE TABLE users(
+	user_id INTEGER NOT NULL PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	pass VARCHAR(255) NOT NULL
+);
+---------------------------------------------------------
+
+CREATE TABLE users(
+	user_id INTEGER NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	pass VARCHAR(255) NOT NULL
+	CONSTRAINT users_pk PRIMARY KEY(user_id)
+);
+---------------------------------------------------------
+
+CREATE TABLE users(
+	user_id INTEGER NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	pass VARCHAR(255) NOT NULL
+	CONSTRAINT users_pk PRIMARY KEY(user_id,name)
+);
+---------------------------------------------------------
+
+CREATE TABLE users(
+	user_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	pass VARCHAR(255) NOT NULL
+);
+---------------------------------------------------------
+
+
+CREATE TABLE users(
+	user_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL,
+	age INTEGER CHECK (age>=18 AND age<=120)
+);
+---------------------------------------------------------
+
+
+CREATE TABLE ticket(
+	ticket_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL,
+	travel_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+---------------------------------------------------------
+
+CREATE TABLE customers(
+	cid INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL UNIQUE
+);
+---------------------------------------------------------
+
+CREATE TABLE orders(
+	order_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	cid INTEGER NOT NULL,
+	CONSTRAINT orders_fk FOREIGN KEY (cid) REFERENCES customers(cid)
+);
+
+
+
+
+
+CREATE TABLE orders(
+	order_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	cid INTEGER NOT NULL,
+	CONSTRAINT orders_fk FOREIGN KEY (cid) REFERENCES customers(cid)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+--------------------------------------------------------------------------
+
+
+ADD New COl:-
+ALTER TABLE customers ADD COLUMN pass VARCHAR(255);
+
+ALTER TABLE customers ADD COLUMN mobile VARCHAR(255) AFTER name;
+
+ALTER TABLE customers ADD COLUMN gender VARCHAR(255) AFTER mobile,
+ADD COLUMN joing_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE customers DROP COLUMN gender;
+
+ALTER TABLE customers DROP COLUMN pass,DROP COLUMN joing_date;
+
+ALTER TABLE customers ADD COLUMN gender VARCHAR(255),
+DROP COLUMN email;
+
+ALTER TABLE customers MODIFY COLUMN mobile INTEGER;
+
+
+-------------------------------------------------------------------------------------------
+INSERT INTO pp.users(user_id,uname,email,pass)
+VALUES(1,'ajay','ajay@gmail.com','1234');
+
+INSERT INTO pp.users
+VALUES(2,'raj','raj@gmail.com','1111');
+
+
+INSERT INTO pp.users(uname,email)
+VALUES('abc','abc@gmail.com');
+
+INSERT INTO pp.users(pass,uname,email)
+VALUES('999','zxc','zxc@gmail.com');
+
+INSERT INTO pp.users VALUES
+(NULL,'q','q@gmail.com','q1'),
+(NULL,'w','w@gmail.com','w1'),
+(NULL,'e','e@gmail.com','e1');
+----------------------------------------------------------------------------------------------
+SELECT * from pp.smartphones;
+
+SELECT brand_name,model,price,ram_capacity from smartphones;
+
+SELECT brand_name,model,price,ram_capacity AS 'RAM' from smartphones;
+
+SELECT brand_name,model,SQRT(resolution_width*resolution_width + resolution_height*resolution_height) AS 'PPI' from smartphones;
+
+SELECT brand_name,model,rating/10 AS 'Rating' from smartphones;
+
+SELECT model, 'Smart Phones' AS 'Type' from smartphones;
+
+SELECT DISTINCT(brand_name) from smartphones;
+
+SELECT DISTINCT brand_name,processor_brand from smartphones;
+
+SELECT * from smartphones WHERE brand_name='samsung';
+
+SELECT * from smartphones WHERE brand_name='samsung' AND price>20000;
+
+SELECT * from smartphones WHERE price BETWEEN 20000 AND 50000;
+
+SELECT * from smartphones WHERE price BETWEEN 20000 AND 50000 AND brand_name='samsung';
+
+SELECT * from smartphones WHERE brand_name='samsung' AND ram_capacity > 8;
+------------------------------------------------------------------------------------------------------
+DESC smartphones;
+
+select count(*) from smartphones;
+
+select * from smartphones where price != 20000;
+
+select * from smartphones where price in(10000,20000,30000);
+
+select * from smartphones where price not in(10000,20000,30000);
+
+select * from smartphones where brand_name like 'a%';
+
+select * from smartphones where brand_name like '%a';
+
+select * from smartphones where brand_name like '%a%';
+
+select * from smartphones where price like '__';
+
+select * from smartphones where price is not null;
+select * from smartphones where price is null;
+
+select * from smartphones order by brand_name asc;
+select * from smartphones order by brand_name desc;
+select * from smartphones where price > 50000 order by brand_name asc;
+
+select brand_name,UPPER(brand_name) as 'UPPER WORD' from smartphones;
+
+select model,lower(model) as 'LOWER WORD' from smartphones;
+
+select brand_name,INITCAP(brand_name) from smartphones;
+-------------------------------------------------------------------------------
+
+SELECT SUM(price) FROM smartphones;
+
+SELECT max(price) FROM smartphones;
+
+SELECT min(price) FROM smartphones;
+
+SELECT min(price) FROM smartphones WHERE brand_name="samsung";
+
+SELECT AVG(price) FROM smartphones;
+
+SELECT COUNT(*) FROM smartphones;
+
+SELECT COUNT(*) FROM smartphones WHERE brand_name="samsung";
+
+SELECT count(distinct(brand_name)) FROM smartphones;
+
+SELECT STD(price) FROM smartphones;
+
+SELECT VARIANCE(price) FROM smartphones;
+
+SELECT ABS(price-100000) FROM smartphones;
+
+SELECT screen_size,round(screen_size,1) FROM smartphones;
+
+SELECT screen_size,CEIL(screen_size) FROM smartphones;
+
+Order Of Query Execution:-
+
+FROM   JOIN   WHERE  GROUP_BY  HAVING  SELECT  DISTINCT  ORDER_BY
+
+SELECT * FROM smartphones WHERE brand_name = "samsung"
+
+SELECT brand_name,length(brand_name) from smartphones;
+
+SELECT brand_name,length(brand_name) from smartphones WHERE length(brand_name)>5;
+------------------------------------------------------------------------------------------
+
+select model,price from smartphones
+ORDER BY price DESC LIMIT 5;
+
+select model,battery_capacity from smartphones
+ORDER BY battery_capacity ASC LIMIT 5;
+
+select model,num_rear_cameras+num_front_cameras AS 'Total_Cameras' from smartphones
+ORDER BY Total_Cameras DESC LIMIT 10;
+
+select model, ROUND(SQRT(resolution_width * resolution_width + resolution_height*resolution_height)/screen_size) AS 'PPI'
+from smartphones
+ORDER BY PPI DESC;
+
+select model,price from smartphones
+ORDER BY price DESC limit 1,1;
+
+select * from smartphones WHERE brand_name='apple'
+ORDER BY rating ASC limit 1;
+
+select * from smartphones
+ORDER BY brand_name ASC,price DESC;
+
+select brand_name,count(*) AS 'Total_Phones',
+round(AVG(price)) AS 'AVG_Price',
+max(rating) AS 'Max_Rating',
+round(AVG(screen_size)) AS 'AVG_Screen_size',
+round(AVG(battery_capacity)) AS 'AVG_Battery_Capacity'
+from smartphones
+group by brand_name
+ORDER BY Total_Phones DESC;
+-------------------------------------------------------------------------------------
+
+select has_5g,
+avg(price) as 'AVG_Price',
+avg(rating) as 'AVG_Rating'
+from smartphones
+group by has_5g;
+
+select brand_name,processor_brand,
+count(*) as 'Total_Phones',
+avg(price) as 'AVG_price'
+from smartphones
+group by brand_name,processor_brand
+order by AVG_price desc;
+
+select brand_name,os,price
+from smartphones
+group by os
+order by price desc limit 1;
+
+select brand_name,
+count(*) as 'Total_Phones'
+from smartphones where has_5g="True" and price>50000
+group by brand_name
+order by Total_Phones desc limit 1;
+
+select brand_name,
+count(*) as 'Total_Phones',
+avg(price) as 'AVG_Price'
+from smartphones where has_5g="True" and price>50000
+group by brand_name
+having Total_Phones>10
+order by AVG_Price desc;
+
+
+select brand_name,
+count(*) as 'Total_Phones',
+avg(price) as 'AVG_Price',
+avg(rating) as 'AVG_Rating'
+from smartphones where has_5g="True" and price>50000
+group by brand_name
+having AVG_Rating>50
+order by AVG_Price desc;
+
+select brand_name,
+avg(ram_capacity) as 'Ram_Capacity',
+avg(price) as 'Price'
+from smartphones where fast_charging_available=1 and ram_capacity>=8
+group by brand_name
+having Price>50000
+order by Price DESC;
+------------------------------------------------------------------------
+
+select * from membership t1 
+INNER JOIN users t2
+ON t1.user_id = t2.user_id;
+
+
+select * from membership t1 
+LEFT JOIN users t2
+ON t1.user_id = t2.user_id;
+
+select * from membership t1 
+RIGHT JOIN users t2
+ON t1.user_id = t2.user_id;
+
+select * from membership t1 
+FULL OUTER JOIN users t2
+ON t1.user_id = t2.user_id;
+
+select * from users t1 
+CROSS JOIN  groups t2
+
+select * from person1
+UNION
+select * from person2
+
+select * from person1
+UNION ALL
+select * from person2
+
+select * from person1
+INTERSECT
+select * from person2
+
+select * from person1
+EXCEPT
+select * from person2
+
+select * from membership t1
+LEFT JOIN users t2
+ON t1.user_id = t2.user_id
+UNION ALL
+select * from membership t1
+RIGHT JOIN users t2
+ON t1.user_id = t2.user_id
+-----------------------------------------------------------------------------
+
+select * from users1 t1
+join user1 t2
+on t1.emergency_contact = t2.user_id;
+
+select * from students t1
+join class t2
+on t1.class_id = t2.class_id
+AND t1.enrollment_year = t2.class_year;
+
+select * from users t1
+join orders t2
+on t1.user_id = t2.user_id
+join order_details t3
+on t2.order_id = t3.order_id;
+
+select t1.name,t2.order_id,t2.order_date,t3.amount,t3.profit from users t1
+join orders t2
+on t1.user_id = t2.user_id
+join order_details t3
+on t2.order_id = t3.order_id;
+
+select t1.name,t1.city,t2.order_id,t2.order_date,t3.amount,t3.profit from users t1
+join orders t2
+on t1.user_id = t2.user_id
+join order_details t3
+on t2.order_id = t3.order_id
+where t1.city="Indore";
+
+delete from users1 where user_id="1";
+
+update registration set uname="Ajay",email_id="ajay@gmail.com"
+where id=2;
+----------------------------------------------------------------------------
+
+select * from movies where score=(SELECT max(score) FROM movies);
+
+SELECT max(gross - budget) FROM movies;
+
+select * from movies where (gross - budget) = (SELECT max(gross - budget) 
+FROM movies);
+
+select * from movies order by (gross - budget) DESC limit 1;
+
+select * from movies where score > (select avg(score) from movies);
+
+select * from movies where year =2000 and score = (select max(score) from movies where year = 2000);
+
+select * from movies where votes > (select avg(votes) from movies);
+
+select max(score) from movies where votes > (select avg(votes) from movies);
+
+select * from movies
+where score = (select max(score) from movies where votes > (select avg(votes) from movies));
+----------------------------------------------------------------------------------------------
+
+select * from users where user_id IN(select distinct(user_id) from orders);
+
+select * from users where user_id NOT IN(select distinct(user_id) from orders);
+
+select * from movies
+where star IN (select star from movies
+where votes > 25000
+group by star
+having avg(score) > 8.0);
+
+
+select year,max(gross - budget) from movies
+group by year;
+
+select * from movies 
+where (year,gross-budget) IN (select year,max(gross - budget) from movies
+group by year);
+------------------------------------------------------------------------------------
+
+ select * from movies
+-- where score > avg(score);
+
+-- select avg(score) from movies
+-- where genre = ?
+
+select * from movies m1
+where score > (select avg(score) from movies m2 where m2.genre = m1.genre);
+
+
+ select *,avg(marks) from marks
+group by branch;
+select *,avg(marks) OVER(PARTITION BY branch) from marks;
+select *,MIN(marks) OVER(PARTITION BY branch) as 'Branch_Min_Score' from marks;
+
+select *,AVG(marks) OVER(PARTITION BY branch) as 'Branch_AVG_Score',
+MIN(marks) OVER(PARTITION BY branch) as 'Branch_Min_Score',
+MAX(marks) OVER(PARTITION BY branch) as 'Branch_Max_Score'
+from marks;
+
+select *,
+DENSE_RANK() OVER(ORDER BY marks DESC) as 'RANK'
+from marks;
+
+select *,
+DENSE_RANK() OVER(PARTITION BY branch ORDER BY marks DESC) as 'RANK'
+from marks;
+
+select *,
+RANK() OVER(ORDER BY marks DESC) as 'RANK',
+DENSE_RANK() OVER(PARTITION BY branch ORDER BY marks DESC) as 'DENSE_RANK'
+from marks;
+
+
+select *,
+ROW_NUMBER() OVER()
+from marks;
+
+select *,
+ROW_NUMBER() OVER(PARTITION BY branch)
+from marks;
+
+select *,
+CONCAT(branch,'-',ROW_NUMBER() OVER(PARTITION BY branch)) as 'Roll_No'
+from marks;
+------------------------------------------------------------------------
+
+SELECT * FROM sub.movies;
+
+select name,substr(name,2,5) from movies;
+
+select concat(name,'-',year) from movies;
+
+select name,trim(leading 'A' from name) from movies;
+select name,trim(trailing 'g' from name) from movies;
+select name,trim(both 'n' from name) from movies;
+
+select name,replace(name,'a','-') from movies;
+[3:36 PM, 5/16/2024] Chetan Sir Frontend: SELECT * FROM sub.orders;
+select sysdate() from orders;
+
+select current_date() from orders;
+select current_time() from orders;
+select curdate() from orders;
+
+select date,day(date) from orders;
+select date,dayname(date) from orders;
+select date,month(date) from orders;
+select date,monthname(date) from orders;
+select date,year(date) from orders;
+
+select date,adddate(date,3) from orders;
+----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+
+select ENAME,e.DEPTNO,(select d.DNAME from dept d where e.DEPTNO = d.DEPTNO) from emp e  where e.DEPTNO = (select d.DEPTNO from dept d where e.DEPTNO = d.DEPTNO);
+
+
+select ename,sal from emp e where sal>(select sal from emp m where e.MGR = m.EMPNO);
+
+select ename,(select ename from emp m where e.MGR = m.EMPNO) as 'Manager Name' from emp e;
+------------------------------------------------------------------------
+
+select hire_date,current_date,months_between(current_date,hire_date) from employees;
+
+select first_name,hire_date,current_date,round(months_between(current_date,hire_date)) from employees;
+
+select first_name||' '||last_name,hire_date,current_date,round(round(months_between(current_date,hire_date))/12) as TY from employees order by TY desc;
+
+select first_name||' '||last_name from employees;
+
+select hire_date,extract(year from hire_date) from employees;
+select hire_date,extract(month from hire_date) from employees;
+select hire_date,extract(day from hire_date) from employees;
+
+select next_day('01-jun-2024','sunday') from dual;
+
+select last_day('01-may-2024') from dual;
+
+--------------------------------------------------------------------------------------------
+select hire_date from employees;
+select hire_date,to_char(hire_date,'yyyy') from employees;
+select hire_date,to_char(hire_date,'yy') from employees;
+select hire_date,to_char(hire_date,'year') from employees;
+select hire_date,to_char(hire_date,'Year') from employees;
+
+select hire_date,to_char(hire_date,'dd') from employees;
+select hire_date,to_char(hire_date,'d') from employees;
+select hire_date,to_char(hire_date,'Day') from employees;
+select hire_date,to_char(hire_date,'Day'),to_char(hire_date,'d') from employees;
+select hire_date,to_char(hire_date,'Mon') from employees;
+select hire_date,to_char(hire_date,'mm') from employees;
+select hire_date,to_char(hire_date,'MM') from employees;
+
+select salary from employees;
+select salary,to_char(salary,'$9,99,999') from employees;
+
+select first_name,salary from employees
+where salary =to_number('$24,000','$99,999');
+
+select first_name,salary from employees
+where salary='24000';
+select first_name,department_id from employees;
+select first_name,department_id from employees
+where department_id in (to_number('$90','$99'),to_number('$60','$99'));
+
+## Jan 01 2003
+select first_name,hire_date from employees;
+select first_name,hire_date from employees
+where hire_date = to_date('Jun 17 2003','Mon dd yyyy');
+
+select first_name,hire_date from employees
+where hire_date = to_date('JUN 17 2003','MON dd yyyy');
+
+select first_name,hire_date,
+to_char(hire_date,'FMDay ddth,"Of",Year')
+from employees;
+
+--select first_name,hire_date,
+--to_char(hire_date,'FMDay ddth,"Of",Year')
+--from employees
+--where hire_date = 
+--to_char('Tuesday 17th,Of,Two Thousand Three',
+--'FMDay ddth,"Of",Year');
+
+select first_name,hire_date,to_char(hire_date,'yyyy')as hd
+from employees where
+to_char(hire_date,'yyyy')>=2005 and
+to_char(hire_date,'yyyy')<=2010
+order by hd ASC;
+
+select first_name,hire_date from employees
+where hire_date between
+to_date('jun 17 2003','mon dd yyyy')
+and to_date('jun 17 2005','mon dd yyyy');
+
+select first_name,hire_date,
+to_char(hire_date,'Day'),
+next_day(add_months(hire_date,6),'sunday')
+from employees;
+
+-----------------------------------------------------------------------
+
+select commission_pct from employees;
+
+select commission_pct,NVL(commission_pct,1) from employees;
+
+select commission_pct,
+NVL2(commission_pct,'Available Value','Not Available Value')
+from employees;
+
+select NULLIF('ABC','ABC') from dual;
+select NULLIF('ABC','ABCD') from dual;
+
+select * from employees;
+select first_name,last_name,
+length(first_name),length(last_name),
+NULLIF(length(first_name),length(last_name))
+from employees;
+
+--coalesce
+select coalesce(null,null,null,2,5,7) from dual;
+
+--decode
+select department_id,salary 
+from employees ORDER BY department_id asc;
+
+select department_id,salary,
+decode(department_id,'10',salary+1000,
+                     '20',salary+2000,
+                     salary+3000)
+from employees ORDER BY department_id asc;
+
+select job_id,
+decode(job_id,'IT_PROG','A+',
+              'SA_MAN','A',
+              'Other')
+from employees;
+
+select count(first_name),count(distinct(first_name))
+from employees;
+
+select first_name from employees;
+
+select listagg(first_name,'-') 
+WITHIN GROUP(order by first_name asc)
+from employees;
+
+select avg(salary) from employees;
+select trunc(avg(salary),2) from employees;
+
+drop table cpy_emp;
+
+create table c_emp as select * from employees;
+
+-------------------------------------------------------------------------------
+
+----lpad(value,length,exp)
+----rpad(value,length,exp)
+--select lpad('abcd',2,'*') from dual;
+--select rpad('abcd',6,'*') from dual;
+--
+--select lpad(first_name,7,'*') from employees;
+--
+--select rpad(lpad(first_name,length(first_name)+2,'*'),
+--length(first_name)+4,'*')
+--from employees;
+--
+--select ltrim('     sql','s') from dual;
+--select ltrim('sql   ','l') from dual;
+----www.abc.com
+--select rtrim(ltrim('www.abcd.com','w.'),'.com') from dual;
+--
+
+------------------------------------------------------
